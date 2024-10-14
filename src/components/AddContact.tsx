@@ -55,7 +55,17 @@ const AddContact: React.FC<AddContactProps> = ({ onAddContact }) => {
         helperText={errors.email ? errors.email.message : ""}
       />
 
-      <TextField label="Phone" {...register("phone")} />
+      <TextField
+        label="Phone"
+        {...register("phone", {
+          pattern: {
+            value: /^[0-9]*$/,
+            message: "Please enter a valid phone number (only digits allowed)",
+          },
+        })}
+        error={!!errors.phone}
+        helperText={errors.phone ? errors.phone.message : ""}
+      />
 
       <TextField label="Address" {...register("address")} />
 
