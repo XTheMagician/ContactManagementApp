@@ -1,14 +1,7 @@
 import React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Typography, Box } from "@mui/material";
-
-interface Contact {
-  id: number;
-  name: string;
-  email: string;
-  phone?: string;
-  address?: string;
-}
+import { Contact } from "../types/Contact";
 
 interface ContactListProps {
   contacts: Contact[];
