@@ -16,11 +16,32 @@ function App() {
     { id: 2, name: "Jane Smith", email: "jane@example.com" },
   ]);
 
+  const [editingContact, setEditingContact] = useState<Contact | null>(null);
+
   const handleAddContact = (newContact: Omit<Contact, "id">) => {
-    const newId =
-      contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 1;
-    const contactWithId: Contact = { ...newContact, id: newId };
-    setContacts([...contacts, contactWithId]);
+    if (editingContact) {
+      const updatedContacts = contacts.map((contact) =>
+        contact.id === editingContact.id
+          ? { ...editingContact, ...newContact }
+          : contact
+      );
+      setContacts(updatedContacts);
+      setEditingContact(null);
+    } else {
+      const newId =
+        contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 1;
+      const contactWithId: Contact = { ...newContact, id: newId };
+      setContacts([...contacts, contactWithId]);
+    }
+  };
+
+  const handleEditContact = (contact: Contact) => {
+    setEditingContact(contact);
+  };
+
+  const handleDeleteContact = (id: number) => {
+    const updatedContacts = contacts.filter((contact) => contact.id !== id);
+    setContacts(updatedContacts);
   };
 
   return (
@@ -28,8 +49,15 @@ function App() {
       <Typography variant="h4" align="center" gutterBottom>
         Contact Management App
       </Typography>
-      <AddContact onAddContact={handleAddContact} />
-      <ContactList contacts={contacts} />
+      <AddContact
+        onAddContact={handleAddContact}
+        editingContact={editingContact}
+      />{" "}
+      <ContactList
+        contacts={contacts}
+        onEditContact={handleEditContact}
+        onDeleteContact={handleDeleteContact}
+      />{" "}
     </Container>
   );
 }
