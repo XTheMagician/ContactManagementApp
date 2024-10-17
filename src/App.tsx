@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Container, Typography, Switch, CssBaseline, Box } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ContactList from "./components/ContactList";
@@ -11,11 +11,15 @@ function App() {
   const { SnackbarNotification, showNotification } = useSnackbarNotification();
   const { contacts, setContacts, saveContacts } = useContactsStorage();
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
-  const [darkMode, setDarkMode] = useState(false);
+
+  const initialDarkMode = sessionStorage.getItem("darkMode") === "true";
+  const [darkMode, setDarkMode] = useState(initialDarkMode);
 
   //Sets the darkmode depending on the current value of the switch
   const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDarkMode(event.target.checked);
+    const isDarkMode = event.target.checked;
+    setDarkMode(isDarkMode);
+    sessionStorage.setItem("darkMode", String(isDarkMode)); // Save preference in session storage
   };
 
   //useMemo to avoid constant recalculations
