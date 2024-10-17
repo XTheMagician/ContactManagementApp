@@ -1,39 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Container, Typography } from "@mui/material";
 import ContactList from "./components/ContactList";
 import AddContact from "./components/AddContact";
 import { Contact } from "./types/Contact";
 import useSnackbarNotification from "./hooks/useSnackbarNotification";
+import { useContactsStorage } from "./hooks/useContactsStorage";
 
 function App() {
   const { SnackbarNotification, showNotification } = useSnackbarNotification();
-  const [contacts, setContacts] = useState<Contact[]>([]);
+  const { contacts, setContacts, saveContacts } = useContactsStorage();
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
-
-  useEffect(() => {
-    const storedContacts = getContacts();
-    setContacts(storedContacts);
-  }, []);
 
   const handleAddContact = (newContact: Omit<Contact, "id">) => {
     if (editingContact) {
-      const updatedContacts = contacts.map((contact) =>
-        contact.id === editingContact.id
-          ? { ...editingContact, ...newContact }
-          : contact
-      );
-      setContacts(updatedContacts);
-      setEditingContact(null);
-      saveContacts(updatedContacts);
-      showNotification("Contact edited successfully!", "info");
+      handleEdit(newContact);
     } else {
-      const newId =
-        contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 1;
-      const contactWithId: Contact = { ...newContact, id: newId };
-      setContacts([...contacts, contactWithId]);
-      saveContacts([...contacts, contactWithId]);
-      showNotification("Contact added successfully!", "success");
+      handleAddNewContact(newContact);
     }
+  };
+
+  const handleAddNewContact = (newContact: Omit<Contact, "id">) => {
+    const newId =
+      contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 1;
+    const contactWithId: Contact = { ...newContact, id: newId };
+    const updatedContacts = [...contacts, contactWithId];
+
+    setContacts(updatedContacts);
+    saveContacts(updatedContacts);
+    showNotification("Contact added successfully!", "success");
+  };
+
+  const handleEdit = (updatedContact: Omit<Contact, "id">) => {
+    const updatedContacts = contacts.map((contact) =>
+      contact.id === editingContact?.id
+        ? { ...editingContact, ...updatedContact }
+        : contact
+    );
+    setContacts(updatedContacts);
+    setEditingContact(null);
+    saveContacts(updatedContacts);
+    showNotification("Contact edited successfully!", "info");
   };
 
   const handleEditContact = (contact: Contact) => {
@@ -47,15 +53,6 @@ function App() {
     showNotification("Contact deleted successfully!", "error");
   };
 
-  const saveContacts = (contacts: Contact[]) => {
-    sessionStorage.setItem("contacts", JSON.stringify(contacts));
-  };
-
-  const getContacts = (): Contact[] => {
-    const storedContacts = sessionStorage.getItem("contacts");
-    return storedContacts ? JSON.parse(storedContacts) : [];
-  };
-
   return (
     <Container maxWidth="md">
       <Typography variant="h4" align="center" gutterBottom>
@@ -64,12 +61,12 @@ function App() {
       <AddContact
         onAddContact={handleAddContact}
         editingContact={editingContact}
-      />{" "}
+      />
       <ContactList
         contacts={contacts}
         onEditContact={handleEditContact}
         onDeleteContact={handleDeleteContact}
-      />{" "}
+      />
       <SnackbarNotification />
     </Container>
   );
