@@ -51,7 +51,7 @@ const AddContact: React.FC<AddContactProps> = ({
     <Box
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 4 }}
+      sx={{ display: "flex", flexDirection: "column", gap: 2, my: 4 }}
     >
       <Typography variant="h5" gutterBottom>
         {editingContact ? "Edit Contact" : "Add New Contact"}
