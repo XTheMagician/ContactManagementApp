@@ -83,14 +83,17 @@ function App() {
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-          mb={2}
+          my={2}
         >
           <Typography variant="h4">Contact Management App</Typography>
-          <Switch
-            checked={darkMode}
-            onChange={handleThemeChange}
-            inputProps={{ "aria-label": "theme toggle" }}
-          />
+          <Box display="flex" alignItems="center" justifyContent="center">
+            <Typography>Darkmode</Typography>
+            <Switch
+              checked={darkMode}
+              onChange={handleThemeChange}
+              inputProps={{ "aria-label": "theme toggle" }}
+            />
+          </Box>
         </Box>
         <AddContact
           onAddContact={handleAddContact}
