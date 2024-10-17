@@ -11,11 +11,7 @@ interface ContactListProps {
   onDeleteContact: (id: number) => void;
 }
 
-const ContactList: React.FC<ContactListProps> = ({
-  contacts,
-  onEditContact,
-  onDeleteContact,
-}) => {
+const ContactList: React.FC<ContactListProps> = ({ contacts, onEditContact, onDeleteContact }) => {
   const columns: GridColDef[] = [
     { field: "name", headerName: "Name", flex: 1, minWidth: 150 },
     { field: "email", headerName: "Email", flex: 1, minWidth: 200 },
@@ -27,18 +23,8 @@ const ContactList: React.FC<ContactListProps> = ({
       type: "actions",
       width: 100,
       getActions: ({ row }) => [
-        <GridActionsCellItem
-          icon={<EditIcon />}
-          label="Edit"
-          onClick={() => onEditContact(row)}
-          showInMenu={false}
-        />,
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          label="Delete"
-          onClick={() => onDeleteContact(row.id)}
-          showInMenu={false}
-        />,
+        <GridActionsCellItem icon={<EditIcon />} label="Edit" onClick={() => onEditContact(row)} showInMenu={false} />,
+        <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={() => onDeleteContact(row.id)} showInMenu={false} />,
       ],
     },
   ];
@@ -47,8 +33,8 @@ const ContactList: React.FC<ContactListProps> = ({
     id: contact.id,
     name: contact.name,
     email: contact.email,
-    phone: contact.phone || "N/A",
-    address: contact.address || "N/A",
+    phone: contact.phone || "",
+    address: contact.address || "",
   }));
 
   return (
