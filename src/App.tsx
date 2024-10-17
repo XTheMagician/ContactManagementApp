@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Container, Typography } from "@mui/material";
+import React, { useState, useMemo } from "react";
+import { Container, Typography, Switch, CssBaseline, Box } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ContactList from "./components/ContactList";
 import AddContact from "./components/AddContact";
 import { Contact } from "./types/Contact";
@@ -10,6 +11,23 @@ function App() {
   const { SnackbarNotification, showNotification } = useSnackbarNotification();
   const { contacts, setContacts, saveContacts } = useContactsStorage();
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
+  const [darkMode, setDarkMode] = useState(false);
+
+  //Sets the darkmode depending on the current value of the switch
+  const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDarkMode(event.target.checked);
+  };
+
+  //useMemo to avoid constant recalculations
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: darkMode ? "dark" : "light",
+        },
+      }),
+    [darkMode]
+  );
 
   const handleAddContact = (newContact: Omit<Contact, "id">) => {
     if (editingContact) {
@@ -54,21 +72,34 @@ function App() {
   };
 
   return (
-    <Container maxWidth="md">
-      <Typography variant="h4" align="center" gutterBottom>
-        Contact Management App
-      </Typography>
-      <AddContact
-        onAddContact={handleAddContact}
-        editingContact={editingContact}
-      />
-      <ContactList
-        contacts={contacts}
-        onEditContact={handleEditContact}
-        onDeleteContact={handleDeleteContact}
-      />
-      <SnackbarNotification />
-    </Container>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container maxWidth="md">
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={2}
+        >
+          <Typography variant="h4">Contact Management App</Typography>
+          <Switch
+            checked={darkMode}
+            onChange={handleThemeChange}
+            inputProps={{ "aria-label": "theme toggle" }}
+          />
+        </Box>
+        <AddContact
+          onAddContact={handleAddContact}
+          editingContact={editingContact}
+        />
+        <ContactList
+          contacts={contacts}
+          onEditContact={handleEditContact}
+          onDeleteContact={handleDeleteContact}
+        />
+        <SnackbarNotification />
+      </Container>
+    </ThemeProvider>
   );
 }
 
