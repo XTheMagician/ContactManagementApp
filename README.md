@@ -9,8 +9,6 @@ Before starting, make sure you have the following installed:
 - **Node.js**: Download it from [here](https://nodejs.org/).
 - **Git**: Download it from [here](https://git-scm.com/).
 
-To check if they are already installed, run the following commands in your terminal:
-
 ## 🚀 Getting Started
 
 Follow these steps to clone the repository and start the app:
