@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Container, Typography, Switch, CssBaseline, Box } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ContactList from "./components/ContactList";
@@ -19,7 +19,7 @@ function App() {
   const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isDarkMode = event.target.checked;
     setDarkMode(isDarkMode);
-    sessionStorage.setItem("darkMode", String(isDarkMode)); // Save preference in session storage
+    sessionStorage.setItem("darkMode", String(isDarkMode));
   };
 
   //useMemo to avoid constant recalculations
